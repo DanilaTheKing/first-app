@@ -14,7 +14,6 @@ public:
     ~Item() {
         /* nothing to do here */
     }
-
     Item& operator=(const Item& other) {
         if (this == &other) {
             return *this;
@@ -25,7 +24,6 @@ public:
 
         return *this;
     }
-
 };
 
 const unsigned K = 10;
@@ -56,7 +54,38 @@ Item createTest() {
     return tmp;
 }
 
+
+struct Test {
+    int value1;
+    int value2;
+    Test() {
+        value1 = value2 = 1;
+    }
+    Test(int v) {
+        value1 = v;
+        value2 = 2;
+    }
+    Test(int v1, int v2) {
+        value1 = v1;
+        value2 = v2;
+    }
+}
+
+
 int main() {
+
+    Test t0;
+    Test t1 = Test(10);
+    Test t2 = Test(10, 20);
+    Test t3(10);
+    Test t4(10, 20);
+
+    std::cout << t0.value1 << std::endl;
+
+    Test* pointer = &t0; //&t0 - взять адрес переменной t0
+    std::cout << pointer->value1 << std::endl;
+
+
     /*
         clone
         pull
