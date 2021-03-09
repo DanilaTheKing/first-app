@@ -69,21 +69,39 @@ struct Test {
         value1 = v1;
         value2 = v2;
     }
+    Test(const Test& other) {
+        value1 = other.value1;
+        value1 = other.value1;
+    }
+    ~Test() {
+        value1 = 0;
+        value2 = 0;
+    }
 }
-
 
 int main() {
 
     Test t0;
-    Test t1 = Test(10);
+    auto t1 = Test(10);
     Test t2 = Test(10, 20);
     Test t3(10);
-    Test t4(10, 20);
+  
 
     std::cout << t0.value1 << std::endl;
 
     Test* pointer = &t0; //&t0 - взять адрес переменной t0
     std::cout << pointer->value1 << std::endl;
+
+    while(...) {
+        int* b = new (100500);
+        Test t4 = t3;
+        std::cout << t4.value1 << std::endl;
+
+        delete b;
+        b = nullptr;
+    }
+
+    auto item = createTest();
 
 
     /*
