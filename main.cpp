@@ -1,10 +1,14 @@
 #include <iostream>
+using namespace std;
 
 class Item {
     const int index;
     int value;
 public:
-    static int currentSize;
+    Item() 
+        : index(0) {
+        value = 0;
+    }
     Item(int index, int value) : index(index) {
         this->value = value;
     }
@@ -19,108 +23,97 @@ public:
             return *this;
         }
 
-        //index = other.index; //�� ����� ������� ���������
+        //index = other.index; 
         value = other.value;
 
         return *this;
     }
+
+    friend istream& operator>>(std::istream& input, Item& point) {
+        //...
+
+        return input;
+    }
 };
 
-const unsigned K = 10;
-Item* items[K];
-int Item::currentSize = 0;
 
-//void add(Item* item) {
-//	if (currentSize < K) {
-//		items[currentSize] = item;
-//		currentSize++;
-//	}
-//}
+ const unsigned maxSize = 3;
+ unsigned currentSize = 0;
+ Item* items[maxSize];
+ 
+void add(Item* item) {
+    if (currentSize < maxSize) {
+        items[currentSize] = item;
+        currentSize++;
+    }
+}
 void add(int value) {
-    if (Item::currentSize < K) {
-        items[Item::currentSize] = new Item(Item::currentSize, value);
-        Item::currentSize++;
+    if (currentSize < maxSize) {
+        Item* elem = new Item(currentSize, value);
+        items[currentSize] = elem;
+        currentSize++;
     }
 }
 void clear() {
-    for (int i = 0; i < Item::currentSize; i++) {
+    for (int i = 0; i < currentSize; i++) {
         delete items[i];
         items[i] = nullptr;
     }
 }
 
-Item createTest() {
-    Item tmp(0, 1);
-    return tmp;
+
+
+// void add(int value) {
+//     if (Item::currentSize < K) {
+//         items[Item::currentSize] = new Item(Item::currentSize, value);
+//         Item::currentSize++;
+//     }
+// }
+
+Item* create(std::istream & input) {
+    cout << ">>";
+    
+    int age = 0;
+    input >> age;
+    if (age < 0) {
+        cout << "Bad input" << endl;
+        return nullptr;
+    }
+    return new Item(currentSize, age);
 }
 
 
-struct Test {
-    int value1;
-    int value2;
-    Test() {
-        value1 = value2 = 1;
-    }
-    Test(int v) {
-        value1 = v;
-        value2 = 2;
-    }
-    Test(int v1, int v2) {
-        value1 = v1;
-        value2 = v2;
-    }
-    Test(const Test& other) {
-        value1 = other.value1;
-        value1 = other.value1;
-    }
-    ~Test() {
-        value1 = 0;
-        value2 = 0;
-    }
-}
 
 int main() {
+    
+    Item b { 0, 20 };
+    Item a = Item(b); //copy constructor
+    Item c;
+    c = a = b;        //operator=()
 
-    Test t0;
-    auto t1 = Test(10);
-    Test t2 = Test(10, 20);
-    Test t3(10);
-  
 
-    std::cout << t0.value1 << std::endl;
+    Item test;
+    cin >> test;
 
-    Test* pointer = &t0; //&t0 - взять адрес переменной t0
-    std::cout << pointer->value1 << std::endl;
-
-    while(...) {
-        int* b = new (100500);
-        Test t4 = t3;
-        std::cout << t4.value1 << std::endl;
-
-        delete b;
-        b = nullptr;
+    //if (test.successInput()) {
+    //    add(test);
+    //}
+    
+    while (true) {
+        Item* test = create(cin);
+        if (test != nullptr) {
+            add(test);
+        }
     }
-
-    auto item = createTest();
-
-
-    /*
-        clone
-        pull
-        commit
-        push
+   
 
 
-        https://ravesli.com/urok-133-peregruzka-operatorov-vvoda-i-vyvoda/
+    add(10);
+    add(20);
+    add(30);
+    add(40);
+    add(50);
 
-    */
-
-    add(100);
-    add(200);
-
-    Item &a = *items[0];
-    Item &b = *items[1];
-    a = b;
 
     clear();
     return 0;
