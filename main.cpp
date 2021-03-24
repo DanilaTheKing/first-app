@@ -1,55 +1,96 @@
 #include <iostream>
+#include <string>
 using namespace std;
+class Flat;
+const unsigned maxSize = 3;
+unsigned currentSize = 0;
+Flat* items[maxSize];
 
-class Item {
+class Flat {
     const int index;
-    int value;
+    float price;
+    std::string address;
+    int floor;
+    int number;
+    float square;
 public:
-    Item() 
-        : index(0) {
-        value = 0;
+
+    Flat(int index, float price, const std::string& address, int floor, int number, float square ) : index(index) {
+        this->address = address;
+        this->price = price;
+        this->floor = floor;
+        this->number = number;
+        this->square = square;
     }
-    Item(int index, int value) : index(index) {
-        this->value = value;
+    Flat(const Flat& other) : index(other.index) { // не особо осознаю синтаксис
+        this->address = other.address;
+        this->price = other.price;
+        this->floor = other.floor;
+        this->number = other.number;
+        this->square = other.square;
+
     }
-    Item(const Item& other) : index(other.index) {
-        value = other.value;
-    }
-    ~Item() {
+    ~Flat() {
         /* nothing to do here */
     }
-    Item& operator=(const Item& other) {
-        if (this == &other) {
+    Flat& operator=(const Flat& other) {
+        if (this == &other) {                    //защита от присваивания самому себе
             return *this;
         }
 
         //index = other.index; 
-        value = other.value;
+        address = other.address;
+        price = other.price;
+        floor = other.floor;
+        number = other.number;
+        square = other.square;
+
 
         return *this;
     }
 
-    friend istream& operator>>(std::istream& input, Item& point) {
-        //...
-
+    friend istream& operator>>(std::istream& input, Flat& flat) {
+        /*...>>( 1)ссылка на cin или др станд  поток ввода
+         2)ссылка на объект куда помещаем данные){...*/
+        char buf[128]={0};
+        input.getline(buf,128);
+        flat.address = std::string(buf);
+        input>>flat.price;
+        while(flat.price<0 ){
+            cout<<"Try again"<<std::endl;
+            input>>flat.price;
+        }
+        input>>flat.square;
+        while(flat.square<0){
+            cout<<"Try again"<<std::endl;
+            input>>flat.square;
+        }
+        input>>flat.number;
+        while(flat.number<0 || flat.number % 1!=0 ){
+            cout<<"Try again"<<std::endl;
+            input>>flat.number;
+        }
+        input>>flat.floor;
+        while(flat.floor<0 || flat.floor % 1!=0 ){
+            cout<<"Try again"<<std::endl;
+            input>>flat.floor;
+        }
         return input;
     }
 };
 
 
- const unsigned maxSize = 3;
- unsigned currentSize = 0;
- Item* items[maxSize];
+
  
-void add(Item* item) {
+//void add(Flat* item) {
+//    if (currentSize < maxSize) {
+//        items[currentSize] = item;
+//        currentSize++;
+//    }
+//}
+/*void add(int value) {
     if (currentSize < maxSize) {
-        items[currentSize] = item;
-        currentSize++;
-    }
-}
-void add(int value) {
-    if (currentSize < maxSize) {
-        Item* elem = new Item(currentSize, value);
+        Flat* elem = new Flat(currentSize, value);
         items[currentSize] = elem;
         currentSize++;
     }
@@ -60,17 +101,17 @@ void clear() {
         items[i] = nullptr;
     }
 }
-
+*/
 
 
 // void add(int value) {
-//     if (Item::currentSize < K) {
-//         items[Item::currentSize] = new Item(Item::currentSize, value);
-//         Item::currentSize++;
+//     if (Flat::currentSize < K) {
+//         items[Flat::currentSize] = new Flat(Flat::currentSize, value);
+//         Flat::currentSize++;
 //     }
 // }
 
-Item* create(std::istream & input) {
+/*Flat* create(std::istream & input) {
     cout << ">>";
     
     int age = 0;
@@ -79,42 +120,36 @@ Item* create(std::istream & input) {
         cout << "Bad input" << endl;
         return nullptr;
     }
-    return new Item(currentSize, age);
+    return new Flat(currentSize, age);
 }
-
+*/
 
 
 int main() {
     
-    Item b { 0, 20 };
-    Item a = Item(b); //copy constructor
-    Item c;
-    c = a = b;        //operator=()
+//    Flat b {0, 20 };
+//    Flat a = Flat(b); //copy constructor
+   // Flat c;
+   // c = a = b;        //operator=()
 
 
-    Item test;
+    Flat test(0,0,"",0,0,0);
+
     cin >> test;
 
     //if (test.successInput()) {
     //    add(test);
     //}
     
-    while (true) {
-        Item* test = create(cin);
+    /*while (true) {
+        Flat* test = create(cin);
         if (test != nullptr) {
             add(test);
         }
     }
    
+*/
 
 
-    add(10);
-    add(20);
-    add(30);
-    add(40);
-    add(50);
-
-
-    clear();
     return 0;
 }
